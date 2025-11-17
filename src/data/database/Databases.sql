@@ -1,19 +1,19 @@
-CREATE TABLE villages
+CREATE TABLE IF NOT EXISTS villages
 (
-    id          integer PRIMARY KEY,
+    id          integer PRIMARY KEY ,
     name        char(25) UNIQUE,
     township_id integer NOT NULL
         CHECK ( name IS NOT NULL AND name <> '')
 );
 
-CREATE TABLE township
+CREATE TABLE IF NOT EXISTS township
 (
     id   integer PRIMARY KEY,
     name char(25) UNIQUE
         CHECK ( name IS NOT NULL AND name <> '')
 );
 
-CREATE TABLE district
+CREATE TABLE IF NOT EXISTS district
 (
     id          integer PRIMARY KEY,
     name        char(25) UNIQUE,
@@ -21,7 +21,7 @@ CREATE TABLE district
         CHECK ( name IS NOT NULL AND name <> '')
 );
 
-CREATE TABLE cityhall
+CREATE TABLE IF NOT EXISTS cityhall
 (
     id          integer PRIMARY KEY,
     name        char(25),
@@ -30,7 +30,7 @@ CREATE TABLE cityhall
 );
 
 
-CREATE TABLE district_township
+CREATE TABLE IF NOT EXISTS district_township
 (
     district_township_id integer,
     township_id          integer,
