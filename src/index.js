@@ -5,12 +5,13 @@ import cityhalls__json_file from './data/ek_kmet.json' with {type: 'json'};
 import villages__json_file from './data/ek_sobr.json' with {type: 'json'};
 import dotenv from 'dotenv';
 
-dotenv.config();
+// import { insert_into_district, insert_into_township, 
+//         insert_into_cityhalls, insert_into_villages } from "./services/databese_inserts.js";
+import { insert_into_table, get_village_values } from './services/databese_inserts.js';
 
-// console.log(readFile[0].name);
-// console.log(township__json_file[0].name_en);
-// console.log(process.env.PDB_PASSWORD);
-// console.log(process.env.PDB_NAME);
+// "use strict";
+
+dotenv.config();
 
 const {Client} = pg;
 
@@ -24,25 +25,38 @@ const client = new Client({
 await client.connect();
 
 
-const text = `
-    CREATE TABLE IF NOT EXISTS villages ( 
-    id          integer PRIMARY KEY,
-    name        char(25) UNIQUE,
-    township_id integer NOT NULL
-        CHECK ( name IS NOT NULL AND name <> '')
-) `;
-const values = [];
-
-
-const create_district = `CREATE TABLE district
-(
-    id        char(3) PRIMARY KEY NOT NULL,
-    name      varchar(25) UNIQUE,
-    center_id integer      NOT NULL 
-        CHECK (name IS NOT NULL AND name <> '')
-        CHECK ( length(id) = 3)
-);`; 
 try {
+    
+    // const text = "(VAR06) общ. Варна, обл. Варна";
+    // const text7 = "(21141) с. Димчево, общ. Бургас, обл. Бургас";
+    // const text8 = "(27632) гр. Етрополе, общ. Етрополе, обл. София";
+    
+    // const text1 = "(12345) общ. VARNA, обл. Варна";
+    // const text4 = "(12345) общ. Варна, обл. дасдадасдасдадсададасдса";
+    // const text2 = "(жа) общ. Варна, обл. Варна";
+    // const text3 = "(12345678) общ. Варна, обл. Варна";
+    // const text5 = "(12345)  Варна, обл. дасдадасдасдадсададасдса";
+    // const text6 = "(12_45) общ. Варна, обл. Варна";
+
+    
+    // const texts = [text, text7, text8,  text1, text2, text3, text4, text5,text6];
+    // const texts = ["(DOB03) общ. Балчик, обл. Добрич"];
+    // // const village_area_regex = /^\(([A-Za-z0-9]{5})\)\s*(?:(?:с\.|гр\.)?\s*([^,]+),\s*)?общ\.?\s*([^,]+),\s*обл\.?\s*(.+)$/;
+
+    // for(let i = 0; i < texts.length; i++) {
+    //     const ids = await get_ids_from_text(texts[i]);
+    //     if (ids.length < 2) {
+    //         console.log("Failed text:", texts[i]);
+
+    //         continue;
+    //     } else if (ids[0].length == 0 || ids[1].length == 0) {
+    //         console.log("Failed text:", texts[i]);
+    //         continue;
+    //     }else {
+    //         console.log("Succesful text:", texts[i], "with result", ids[0], ids[1]);
+    //     }
+    // }
+
     //CHECK FOR CONNECTION
     // const res = await client.query('SELECT $1::text as message', ['Hello world!'])
     // console.log(res.rows[0].message)
@@ -50,25 +64,32 @@ try {
     // const curr_db = await client.query('SELECT current_database()');
     // console.log(curr_db.rows);
 
-    //////CREATE TABLE
-    // const tableCreate = await client.query(text, values)
-    // console.log(tableCreate.rows[0])
-
-    // const district_Create = await client.query(create_district);
-
     ///INSERT
-
-    const district_insert = 'INSERT INTO district(id, name, center_id) VALUES($1, $2, $3) RETURNING *';
-    await insert_into_district_table(district_insert, client, 'District', district__json_file);
+    //////Old inserts
+    // const district_insert = 'INSERT INTO district(id, name, name_en, center_id) VALUES($1, $2, $3, $4) RETURNING *';
+    // await insert_into_district(district_insert, client, 'District', district__json_file);
     
-    const township_insert = ' INSERT INTO township(id, name,district_id, center_id) VALUES($1, $2, $3, $4) RETURNING *;';
-    await insert_into_township_table(township_insert, client, 'Township', township__json_file);
+    // const township_insert = ' INSERT INTO township(id, name, name_en, district_id, center_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+    // await insert_into_township(township_insert, client, 'Township', township__json_file);
     
-    const cityhalls_insert = ' INSERT INTO cityhall(id, name, township_id) VALUES($1, $2, $3) RETURNING *;';
-    await insert_into_cityhalls_table(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file);
+    // const cityhalls_insert = ' INSERT INTO cityhall(id, name, name_en, township_id) VALUES($1, $2, $3, $4) RETURNING *;';
+    // await insert_into_cityhalls(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file);
     
-    const villages_insert = ' INSERT INTO villages(id, name, township_id, district_id) VALUES($1, $2, $3, $4) RETURNING *;';
-    await insert_into_villages_table(villages_insert, client, 'Villages', villages__json_file);
+    // const villages_insert = ' INSERT INTO villages(id, name, name_en, township_id, district_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+    // await insert_into_villages(villages_insert, client, 'Villages', villages__json_file);
+    
+    //////New inserts
+    // const district_insert = 'INSERT INTO district(id, name, name_en, center_id) VALUES($1, $2, $3, $4) RETURNING *';
+    // await insert_into_table(district_insert, client, 'District', district__json_file, row => [row.oblast, row.name, row.name_en, row.ekatte]);
+    
+    // const township_insert = ' INSERT INTO township(id, name, name_en, district_id, center_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+    // await insert_into_table(township_insert, client, 'Township', township__json_file, row => [row.obshtina, row.name, row.name_en, row.obshtina.substring(0,3), row.ekatte]);
+    
+    // const cityhalls_insert = ' INSERT INTO cityhall(id, name, name_en, township_id) VALUES($1, $2, $3, $4) RETURNING *;';
+    // await insert_into_table(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file, row => [row.kmetstvo, row.name, row.name_en, row.kmetstvo.substring(0,5)]);
+    
+    // const villages_insert = ' INSERT INTO villages(id, name, name_en, township_id, district_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+    // await insert_into_table(villages_insert, client, 'Villages', villages__json_file, get_village_values);
     
     ///SELECT
     // const district_res = await client.query('SELECT * from district;');
@@ -79,93 +100,3 @@ try {
     await client.end()
 }
 
-async function create_table(create_table_text, client, table_name) {
-    
-    try {
-        const table_create = await client.query(create_table_text);
-        
-        console.log("Created table " + table_create.rows[0]);
-        return true;
-    }
-    catch (err) {
-        console.log("Error in query: ", err);
-        return false;
-    }
-    finally {
-
-    }
-}
-
-async function insert_into_district_table(insert_into_table_text, client, table_name, file_json) {
-    console.log("Inserting into table " + table_name);
-    let succesful_isertions = 0;
-
-    for (let i = 0; i < file_json.length - process.env.EKATTE_OBLASTI_EXTRA_LINES; i++) {
-        const values = [file_json[i].oblast, file_json[i].name_en, file_json[i].ekatte];
-        try {
-            const res = await client.query(insert_into_table_text, values);
-            succesful_isertions ++;
-        }
-        catch (err){
-            // console.log("Error in query: ", err);
-        }
-    }
-    console.log("Successfuly inserted into table ", table_name, " this many rows ", succesful_isertions);
-}
-
-async function insert_into_township_table(insert_into_table_text, client, table_name, file_json) {
-    console.log("Inserting into table " + table_name);
-    let succesful_isertions = 0;
-
-    for (let i = 0; i < file_json.length - process.env.EKATTE_OBLASTI_EXTRA_LINES; i++) {
-        const values = [file_json[i].obshtina, file_json[i].name_en, file_json[i].obshtina.substring(0,3),file_json[i].ekatte];
-        // console.log(values);
-        try {
-            const res = await client.query(insert_into_table_text, values);
-            succesful_isertions ++;
-        }
-        catch (err){
-            // console.log("Error in query: ", err);
-        }
-    }
-    console.log("Successfuly inserted into table ", table_name, " this many rows ", succesful_isertions);
-}
-
-async function insert_into_cityhalls_table(insert_into_table_text, client, table_name, file_json) {
-    console.log("Inserting into table " + table_name);
-    let succesful_isertions = 0;
-
-    for (let i = 0; i < file_json.length - process.env.EKATTE_OBLASTI_EXTRA_LINES; i++) {
-        const values = [file_json[i].kmetstvo, file_json[i].name_en, file_json[i].kmetstvo.substring(0,5)];
-        // console.log(values);
-        try {
-            const res = await client.query(insert_into_table_text, values);
-            succesful_isertions ++;
-        }
-        catch (err){
-            // console.log("Error in query: ", err);
-        }
-    }
-    console.log("Successfuly inserted into table ", table_name, " this many rows ", succesful_isertions);
-}
-
-async function insert_into_villages_table(insert_into_table_text, client, table_name, file_json) {
-    console.log("Inserting into table " + table_name);
-    let succesful_isertions = 0;
-
-    console.log(file_json.length);
-    console.log(file_json[0]);
-    
-    for (let i = 0; i < file_json.length - process.env.EKATTE_OBLASTI_EXTRA_LINES; i++) {
-        const values = [file_json[i].ekatte, file_json[i].name_en, file_json[i].area1.substring(1,6), file_json[i].area1.substring(1,4)];
-        // console.log(values);
-        try {
-            const res = await client.query(insert_into_table_text, values);
-            succesful_isertions ++;
-        }
-        catch (err){
-            // console.log("Error in query: ", err);
-        }
-    }
-    console.log("Successfuly inserted into table ", table_name, " this many rows ", succesful_isertions);
-}
