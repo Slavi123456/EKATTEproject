@@ -1,10 +1,19 @@
 import { parse_names_from_village_text } from "../utils/villageParser.js";
 import { select_id_query_from_district } from "../db/district.js";
 import { select_id_query_from_township } from "../db/township.js";
+import { validateMany } from "../utils/validation.js";
 
 export {get_village_values}
 
 async function get_ids_from_text(text, client) {
+  validateMany ( {
+    text: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
+    client: process.env.VALIDATION_TYPE_DB_CLIENT,
+  }, arguments);
+
+
+  ////////
+  //Logic
   const values = parse_names_from_village_text(text);
   if(!values) return null;
   
@@ -12,6 +21,14 @@ async function get_ids_from_text(text, client) {
 }
 
 async function get_ids_from_queries(township_name, district_name, client) {
+  validateMany ( {
+    township_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
+    district_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
+    client: process.env.VALIDATION_TYPE_DB_CLIENT,
+  }, arguments);
+
+  ////
+  //Logic
   let ids = null;
   try {
     ids = {
@@ -31,6 +48,13 @@ async function get_ids_from_queries(township_name, district_name, client) {
 
 
 async function get_village_values(file_row, client) {
+  validateMany ( {
+    file_row: process.env.VALIDATION_TYPE_OBJECT,
+    client: process.env.VALIDATION_TYPE_DB_CLIENT,
+  }, arguments);
+  
+  /////
+  //Logic
   const ids = await get_ids_from_text(file_row.area1, client);
 
   if (!ids || !ids.district_id || !ids.township_id) return null;

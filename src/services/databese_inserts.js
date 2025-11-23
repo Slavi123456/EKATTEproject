@@ -1,9 +1,49 @@
+import { validateMany } from "../utils/validation.js";
+import dotenv from 'dotenv';
+
 export { insert_into_table};
 // export {insert_into_district, insert_into_township,
 //         insert_into_cityhalls, insert_into_villages}
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {
+  /////////////////////////////////////////////////////
+  //Validation
+  validateMany ( {
+    insert_statement: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
+    db_client: process.env.VALIDATION_TYPE_DB_CLIENT,
+    table_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
+    file_json: process.env.VALIDATION_TYPE_ARRAY,
+    valueMapper: process.env.VALIDATION_TYPE_FUNCTION
+  }, arguments);
+
+//   if (typeof insert_statement !== "string" || insert_statement.trim().length === 0) {
+//     throw new TypeError("insert_statement must be a non-empty string");
+//   }
+
+//   if (!db_client || typeof db_client.query !== "function") {
+//     throw new TypeError("db_client must be a PostgreSQL client with a .query() method");
+//   }
+
+//   if (typeof table_name !== "string" || table_name.trim().length === 0) {
+//     throw new TypeError("table_name must be a non-empty string");
+//   }
+
+//   if (!Array.isArray(file_json)) {
+//     throw new TypeError("file_json must be an array");
+//   }
+
+//   if (file_json.length === 0) {
+//     throw new Error("file_json is empty — nothing to insert");
+//   }
+//   //maybe i should also check the return parameters of this
+//   if (typeof valueMapper !== "function") {
+//     throw new TypeError("valueMapper must be a function");
+//   }  
+
+  /////////////////////////////////////////////////////
+  //Actual logic
   console.log("Inserting into table " + table_name);
+  
   let succesful_isertions = 0;
 
   let data_count = file_json.length - process.env.EKATTE_TABLES_EXTRA_LINES;
