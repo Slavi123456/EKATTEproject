@@ -1,0 +1,18 @@
+export {parse_names_from_village_text};
+
+function parse_names_from_village_text(text) {
+  const village_area_regex =
+    /^\(([A-Za-z0-9]{5})\)\s*(?:(?:с\.|гр\.)?\s*([^,]+),\s*)?общ\.?\s*([^,]+),\s*обл\.?\s*(.+)$/;
+  const match = text.match(village_area_regex);
+
+  if (!match) return null;
+  //   console.log(match);
+  const [, code, settlement, township, district] = match;
+  
+  return {
+    code: code.trim(),
+    settlement: settlement == null ? "null" : settlement.trim(),
+    township: township.trim(),
+    district: district.trim(),
+  };
+}
