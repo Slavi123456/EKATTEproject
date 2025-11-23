@@ -2,8 +2,11 @@ import { parse_names_from_village_text } from "../utils/villageParser.js";
 import { select_id_query_from_district } from "../db/district.js";
 import { select_id_query_from_township } from "../db/township.js";
 import { validateMany } from "../utils/validation.js";
+import { withErrorHandling } from "../utils/errorHandling.js";
 
-export {get_village_values}
+export {safe_get_village_values}
+
+const safe_get_village_values = withErrorHandling(get_village_values);
 
 async function get_ids_from_text(text, client) {
   validateMany ( {
@@ -30,17 +33,13 @@ async function get_ids_from_queries(township_name, district_name, client) {
   ////
   //Logic
   let ids = null;
-  try {
-    ids = {
-        district_id: await select_id_query_from_district(district_name, client),
-        township_id: await select_id_query_from_township(township_name, client),
-    };
-    if (ids.district_id == null || ids.district_id == null) {
-      return null;
-    }
-
-  } catch (err) {
-    console.log("Error in query:", err);
+  
+  ids = {
+      district_id: await select_id_query_from_district(district_name, client),
+      township_id: await select_id_query_from_township(township_name, client),
+  };
+  if (ids.district_id == null || ids.district_id == null) {
+    return null;
   }
 
   return ids;

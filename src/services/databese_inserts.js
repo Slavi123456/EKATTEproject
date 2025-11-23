@@ -1,9 +1,12 @@
 import { validateMany } from "../utils/validation.js";
 import dotenv from 'dotenv';
+import {withErrorHandling } from "../utils/errorHandling.js";
 
-export { insert_into_table};
+export { safe_insert_into_table};
 // export {insert_into_district, insert_into_township,
 //         insert_into_cityhalls, insert_into_villages}
+
+const safe_insert_into_table = withErrorHandling(insert_into_table);
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {
   /////////////////////////////////////////////////////
@@ -48,19 +51,10 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
 
   let data_count = file_json.length - process.env.EKATTE_TABLES_EXTRA_LINES;
   for (let i = 0; i < data_count; i++) {
-    let values;
+    let values = await valueMapper(file_json[i], db_client);
     
-    try {
-      values = await valueMapper(file_json[i], db_client);
-
-      const res = await db_client.query(insert_statement, values);
-      succesful_isertions++;
-
-    } catch (err) {
-      
-      console.log("Error in query: ", err);
-
-    }
+    const res = await db_client.query(insert_statement, values);
+    succesful_isertions++;
   }
   
   console.log(
