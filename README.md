@@ -1,16 +1,43 @@
 # EKATTE Project
 
-This project loads and imports data from the official EKATTE files  
-(available at the National Statistical Institute: https://www.nsi.bg/nrnm/ekatte/index)  
-into a PostgreSQL database.  
-A web interface has to be provided for searching settlements and related information.
+Този проект зарежда и вкарва данни от официалните **ЕКАТТЕ** файлове, предоставени от Националния статистически институт ([NSI EKATTE](https://www.nsi.bg/nrnm/ekatte/index)), в **PostgreSQL** база данни. Освен това предоставя уеб интерфейс за търсене на селища и извеждане на информация.
+
+## Основни технологии
+
+- **Docker** – За контейнеризация на базите данни, в които ще се съхранява информацията.
+- **Node.js** – За backend логиката.
+- **PostgreSQL** – За комуникация между backend-а и базите данни.
+
+## Схема на проекта
+
+![Database Schema](./src/data/database/schema.png)
+
+## Ключови функционалности
+
+- Дефинирана база данни с индекси и **CHECK** ограничения.
+- Зареждане на информация от **EKATTE JSON** файлове и запазването им в базата данни.
+- Проверка на данните за валидност.
+- Предотвратяване на дубликати в базата данни.
+- Защита срещу **SQL инжекции** чрез параметризирани заявки.
 
 ## TODO
 
-* Load data from the EKATTE JSON files into the database  
-* Validate the input data  
-* Prevent data duplication when importing multiple times  
-* Implement safe SQL queries (avoiding SQL injections)  
-* Create a simple web search interface
-* Write unit tests
+- Изграждане на прост уеб интерфейс за търсене на селища и извеждане на свързана информация.
+- Написване на **unit тестове** за основните функционалности на проекта.
 
+## Изисквания преди пускане
+
+1. Изтеглен и конфигуриран **Docker**.
+2. Стартирайте Docker контейнер с PostgreSQL, като изпълните следните команди:
+
+   ```bash
+   docker pull postgres  # Изтегляне на последната версия на PostgreSQL
+   docker create --name ekatte_db -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres  # Създаване на контейнер с PostgreSQL
+   docker start ekatte_db  # Стартиране на контейнера
+
+3. Създайте таблици в контейнера, използвайки скрипта Database.sql:
+
+    ```bash
+    docker exec -i ekatte_db psql -U postgres -d postgres < ./path/to/Database.sql  # Изпълнение на SQ
+
+    Заменете ./path/to/Database.sql с пълния път към вашия файл Database.sql.
