@@ -6,6 +6,8 @@ export { safe_insert_into_table};
 // export {insert_into_district, insert_into_township,
 //         insert_into_cityhalls, insert_into_villages}
 
+dotenv.config();
+
 const safe_insert_into_table = withErrorHandling(insert_into_table);
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {

@@ -27,35 +27,6 @@ await client.connect();
 
 
 try {
-    // const text = "(VAR06) общ. Варна, обл. Варна";
-    // const text7 = "(21141) с. Димчево, общ. Бургас, обл. Бургас";
-    // const text8 = "(27632) гр. Етрополе, общ. Етрополе, обл. София";
-
-    // const text1 = "(12345) общ. VARNA, обл. Варна";
-    // const text4 = "(12345) общ. Варна, обл. дасдадасдасдадсададасдса";
-    // const text2 = "(жа) общ. Варна, обл. Варна";
-    // const text3 = "(12345678) общ. Варна, обл. Варна";
-    // const text5 = "(12345)  Варна, обл. дасдадасдасдадсададасдса";
-    // const text6 = "(12_45) общ. Варна, обл. Варна";
-
-
-    // const texts = [text, text7, text8,  text1, text2, text3, text4, text5,text6];
-    // const texts = ["(DOB03) общ. Балчик, обл. Добрич"];
-    // // const village_area_regex = /^\(([A-Za-z0-9]{5})\)\s*(?:(?:с\.|гр\.)?\s*([^,]+),\s*)?общ\.?\s*([^,]+),\s*обл\.?\s*(.+)$/;
-
-    // for(let i = 0; i < texts.length; i++) {
-    //     const ids = await get_ids_from_text(texts[i]);
-    //     if (ids.length < 2) {
-    //         console.log("Failed text:", texts[i]);
-
-    //         continue;
-    //     } else if (ids[0].length == 0 || ids[1].length == 0) {
-    //         console.log("Failed text:", texts[i]);
-    //         continue;
-    //     }else {
-    //         console.log("Succesful text:", texts[i], "with result", ids[0], ids[1]);
-    //     }
-    // }
 
     //CHECK FOR CONNECTION
     // const res = await client.query('SELECT $1::text as message', ['Hello world!'])
