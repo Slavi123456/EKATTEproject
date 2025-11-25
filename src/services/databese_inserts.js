@@ -6,7 +6,8 @@ export { safe_insert_into_table};
 
 dotenv.config();
 
-const safe_insert_into_table = withErrorHandling(insert_into_table, {notRethrow: true});
+// const safe_insert_into_table = withErrorHandling(insert_into_table, {notRethrow: true});
+const safe_insert_into_table = withErrorHandling(insert_into_table);
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {
   /////////////////////////////////////////////////////
@@ -22,20 +23,21 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
   /////////////////////////////////////////////////////
   //Actual logic
   console.log("Inserting into table " + table_name);
-  
-  let succesful_isertions = 0;
+  // console.log(file_json.length - 1);
+  // let succesful_isertions = 0;
 
   let data_count = file_json.length - process.env.EKATTE_TABLES_EXTRA_LINES;
   for (let i = 0; i < data_count; i++) {
     let values = await valueMapper(file_json[i], db_client);
+    // console.log(values);
     
     const res = await db_client.query(insert_statement, values);
-    succesful_isertions++;
+    // succesful_isertions++;
   }
   
-  console.log(
-    `Successfuly inserted into table ${table_name} this many rows ${succesful_isertions}`
-  );
+  // console.log(
+  //   `Successfuly inserted into table ${table_name} this many rows ${succesful_isertions}`
+  // );
 }
 
 //////////////////////////////////////

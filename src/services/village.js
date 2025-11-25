@@ -21,8 +21,11 @@ async function get_ids_from_text(text, client) {
   //Logic
   const values = parse_names_from_village_text(text);
   // if(!values) throw new ;
+  // console.log(JSON.stringify(values));
 
-  return await get_ids_from_queries(values.township, values.district, client);
+  const ids = await get_ids_from_queries(values.township, values.district, client);
+  // console.log(ids);
+  return ids;
 }
 
 async function get_ids_from_queries(township_name, district_name, client) {
@@ -35,11 +38,11 @@ async function get_ids_from_queries(township_name, district_name, client) {
   ////
   //Logic
   let ids = {
-      disrict_id: await select_id_query_from_district(district_name, client),
+      district_id: await select_id_query_from_district(district_name, client),
       township_id: await select_id_query_from_township(township_name, client),
   };
   
-  if (ids.disrict_id == null || ids.township_id == null) {
+  if (ids.district_id == null || ids.township_id == null) {
     return new NotFoundError(`Couldn't get the district_id with district: ${district_name} or township_id from township ${township_name}`);
   }
 

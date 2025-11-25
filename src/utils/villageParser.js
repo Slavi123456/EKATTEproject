@@ -24,7 +24,7 @@ function parse_names_from_village_text(text_to_parse) {
     township: township.trim(),
     district: district.trim(),
   };
-
+  
   if(result.township == "" || result.district == "") {
     throw new SyntaxError(`Invalid village format for ${text_to_parse}`);
   }

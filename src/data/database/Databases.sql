@@ -2,7 +2,7 @@ CREATE TABLE district (
     id CHAR(3) PRIMARY KEY,
     name VARCHAR(25) NOT NULL UNIQUE,
     name_en VARCHAR(25) NOT NULL UNIQUE,
-    center_id CHAR(5) NOT NULL UNIQUE,
+    center_id CHAR(5) NOT NULL,
     CHECK (length(id) = 3),
     CHECK (length(center_id) = 5)
 );
@@ -64,6 +64,7 @@ CREATE INDEX idx_cityhall_township_id ON cityhall(township_id);
 
 -- ALTER TABLE township DROP CONSTRAINT township_name_key;
 -- ALTER TABLE cityhall DROP CONSTRAINT cityhall_name_key;
+-- ALTER TABLE district DROP CONSTRAINT district_center_id_key;
 
 -- SELECT id from district WHERE name = 'Варна';
 -- SELECT id from township WHERE name = 'Варна';

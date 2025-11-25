@@ -19,9 +19,9 @@ function withErrorHandling(fn, options = {}) {
     try {
       return await fn(...args);
     } catch (err) {
-      console.log(options.notRethrow);
-      if (options.notRethrow) return;
-
+      // console.log(options.notRethrow);
+      // if (options.notRethrow) return;
+      // console.log(err);
       throw err;
     }
   };

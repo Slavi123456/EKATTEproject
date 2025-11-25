@@ -1,0 +1,47 @@
+[
+  {
+    "kmetstvo": "KRZ16-25",
+    "name": "\u041f\u0435\u043d\u044c\u043e\u0432\u043e",
+    "ekatte": "55823",
+    "document": 1943,
+    "category": 8,
+    "name_en": "Penyovo",
+    "nuts1": "BG4",
+    "nuts2": "BG42",
+    "nuts3": "BG425"
+  },
+  {
+    "kmetstvo": "BGS23-19",
+    "name": "\u0421\u043b\u0430\u0432\u044f\u043d\u0446\u0438",
+    "ekatte": "67115",
+    "document": 1943,
+    "category": 8,
+    "name_en": "Slavyantsi",
+    "nuts1": "BG3",
+    "nuts2": "BG34",
+    "nuts3": "BG341"
+  },
+  
+  {
+    "kmetstvo": "SML09-13",
+    "name": "\u0422\u0440\u0438\u0433\u0440\u0430\u0434",
+    "ekatte": "73105",
+    "document": 1943,
+    "category": 8,
+    "name_en": "Trigrad",
+    "nuts1": "BG4",
+    "nuts2": "BG42",
+    "nuts3": "BG424"
+  },
+  {
+    "kmetstvo": "KRZ14-41",
+    "name": "\u0424\u043e\u0442\u0438\u043d\u043e\u0432\u043e",
+    "ekatte": "76159",
+    "document": 1943,
+    "category": 8,
+    "name_en": "Fotinovo",
+    "nuts1": "BG4",
+    "nuts2": "BG42",
+    "nuts3": "BG425"
+  }
+]
