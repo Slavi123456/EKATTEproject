@@ -1,5 +1,34 @@
 export {withErrorHandling}
 
+/////////////
+//Example
+// function throws() {
+//     const a = 5;
+//     throw new NotFoundError(`A is ${a}`);
+// }
+//
+// function callsThrows() {
+//     throws();
+// }
+//
+// const safe_callsThrows = withErrorHandling(callsThrows);
+// safe_callsThrows();
+
+function withErrorHandling(fn, options = {}) {
+  return async function (...args) {
+    try {
+      return await fn(...args);
+    } catch (err) {
+      console.log(options.notRethrow);
+      if (options.notRethrow) return;
+
+      throw err;
+    }
+  };
+}
+
+
+////////////////////////////////////
 // const tryCatch = (action) => async (...args) => {
 //     try {
 //         await action(...args);
@@ -21,14 +50,3 @@ export {withErrorHandling}
 //         }
 //     }
 // }
-
-function withErrorHandling(fn) {
-  return async function (...args) {
-    try {
-      return await fn(...args);
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-}

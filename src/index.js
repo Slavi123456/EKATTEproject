@@ -36,14 +36,14 @@ try {
     // console.log(curr_db.rows);
 
     ///INSERT
-    // const district_insert = 'INSERT INTO district(id, name, name_en, center_id) VALUES($1, $2, $3, $4) RETURNING *';
-    // await safe_insert_into_table(district_insert, client, 'District', district__json_file, row => [row.oblast, row.name, row.name_en, row.ekatte]);
+    const district_insert = 'INSERT INTO district(id, name, name_en, center_id) VALUES($1, $2, $3, $4) RETURNING *';
+    await safe_insert_into_table(district_insert, client, 'District', district__json_file, row => [row.oblast, row.name, row.name_en, row.ekatte]);
 
-    // const township_insert = ' INSERT INTO township(id, name, name_en, district_id, center_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
-    // await safe_insert_into_table(township_insert, client, 'Township', township__json_file, row => [row.obshtina, row.name, row.name_en, row.obshtina.substring(0,3), row.ekatte]);
+    const township_insert = ' INSERT INTO township(id, name, name_en, district_id, center_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
+    await safe_insert_into_table(township_insert, client, 'Township', township__json_file, row => [row.obshtina, row.name, row.name_en, row.obshtina.substring(0,3), row.ekatte]);
 
-    // const cityhalls_insert = ' INSERT INTO cityhall(id, name, name_en, township_id) VALUES($1, $2, $3, $4) RETURNING *;';
-    // await safe_insert_into_table(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file, row => [row.kmetstvo, row.name, row.name_en, row.kmetstvo.substring(0,5)]);
+    const cityhalls_insert = ' INSERT INTO cityhall(id, name, name_en, township_id) VALUES($1, $2, $3, $4) RETURNING *;';
+    await safe_insert_into_table(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file, row => [row.kmetstvo, row.name, row.name_en, row.kmetstvo.substring(0,5)]);
 
     const villages_insert = ' INSERT INTO villages(id, name, name_en, township_id, district_id) VALUES($1, $2, $3, $4, $5) RETURNING *;';
     await safe_insert_into_table(villages_insert, client, 'Villages', villages__json_file, safe_get_village_values);

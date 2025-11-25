@@ -1,77 +1,77 @@
-import assert from 'assert';
 import { parse_names_from_village_text } from '../src/utils/villageParser.js';
-// import dotenv from 'dotenv';
+import { assertThrows, assertWithMessage } from './test_utils.js';
 
 
-function assertWithMessage(test_name, func, expected) {
-  return function () {
-    const result = func();
-    try {
-      assert.deepStrictEqual(result, expected);
-      console.log(`Test ${test_name} passed!`);
-    } catch (err) {
-      console.error(`Test ${test_name} failed. Expected ${JSON.stringify(expected)}, got ${JSON.stringify(result)}.`);
-    }
-  }
-}
-
-//Example
-// function add (a,b) {
-//   // console.log(add.name);
-//   return a+b;
-// }
-// const test_add = assertWithMessage1 ('test_add', () => add(2,3), 5);
-// test_add();
-
-
-// dotenv.config();
 test_parsing_village_test();
 
 function test_parsing_village_test() {
-    // console.log(dotenv.process.env.VALIDATION_TYPE_NONEMPTY_STRING);
-
-    const text = "(VAR06) общ. Варна, обл. Варна";
-    // const text7 = "(21141) с. Димчево, общ. Бургас, обл. Бургас";
-    // const text8 = "(27632) гр. Етрополе, общ. Етрополе, обл. София";
-    
-    // console.log(typeof text);
-    // console.log(parse_names_from_village_text(text));
-    
-    const test_valid_village_parse = assertWithMessage ('test_valid_village_parse', 
-      () => parse_names_from_village_text(text), 
+  
+    const test_village_parse_1 = assertWithMessage ('test_village_parse_1', 
+      () => parse_names_from_village_text("(VAR06) общ. Варна, обл. Варна"), 
       {
         code: 'VAR06',
         settlement: 'null',
         township: 'Варна',
         district: 'Варна',
       });
-    test_valid_village_parse();
+    test_village_parse_1();
+    
+    const test_village_parse_2 = assertWithMessage ('test_village_parse_2', 
+      () => parse_names_from_village_text("(21141) с. Димчево, общ. Бургас, обл. Бургас"), 
+      {
+        code: '21141',
+        settlement: 'Димчево',
+        township: 'Бургас',
+        district: 'Бургас',
+    });
+    test_village_parse_2();
+    const test_village_parse_3 = assertWithMessage ('test_village_parse_3', 
+      () => parse_names_from_village_text("(27632) гр. Етрополе, общ. Етрополе, обл. София"), 
+      {
+      code: '27632',
+      settlement: 'Етрополе',
+      township: 'Етрополе',
+      district: 'София',
+    });
+    test_village_parse_3();
 
-
+    //////////////////////////////////////////////////
+    // console.log(parse_names_from_village_text("(жа) общ. Варна, обл. Варна"));
     //These should fail
-    // const text1 = "(12345) общ. VARNA, обл. Варна";
-    // const text4 = "(12345) общ. Варна, обл. дасдадасдасдадсададасдса";
-    // const text2 = "(жа) общ. Варна, обл. Варна";
-    // const text3 = "(12345678) общ. Варна, обл. Варна";
-    // const text5 = "(12345)  Варна, обл. дасдадасдасдадсададасдса";
-    // const text6 = "(12_45) общ. Варна, обл. Варна";
+    const test_village_parse_4 = assertThrows ('test_village_parse_4', 
+      () => parse_names_from_village_text("(жа) общ. Варна, обл. Варна"), 
+    );
+    test_village_parse_4();
+    
+    const test_village_parse_5 = assertThrows ('test_village_parse_5', 
+      () => parse_names_from_village_text("(12345678) общ. Варна, обл. Варна"), 
+    );
+    test_village_parse_5();
+    
+    const test_village_parse_6 = assertThrows ('test_village_parse_6', 
+      () => parse_names_from_village_text("(123) общ. Варна, обл. Варна"), 
+    );
+    test_village_parse_6();
+    
+    const test_village_parse_7 = assertThrows ('test_village_parse_7', 
+      () => parse_names_from_village_text("(12_45) общ. Варна, обл. Варна"), 
+    );
+    test_village_parse_7();
 
-    // const texts = [text, text7, text8,  text1, text2, text3, text4, text5,text6];
+    const test_village_parse_8 = assertThrows ('test_village_parse_8', 
+      () => parse_names_from_village_text("(12345) общ. , обл. Варна"), 
+    );
+    test_village_parse_8();
 
+    const test_village_parse_9 = assertThrows ('test_village_parse_9', 
+      () => parse_names_from_village_text("(12345) общ. Варна, обл. "), 
+    );
+    test_village_parse_9();
 
-    // for(let i = 0; i < texts.length; i++) {
-    //     const ids = await get_ids_from_text(texts[i]);
-    //     if (ids.length < 2) {
-    //         console.log("Failed text:", texts[i]);
-
-    //         continue;
-    //     } else if (ids[0].length == 0 || ids[1].length == 0) {
-    //         console.log("Failed text:", texts[i]);
-    //         continue;
-    //     }else {
-    //         console.log("Succesful text:", texts[i], "with result", ids[0], ids[1]);
-    //     }
-    // }
+    const test_village_parse_10 = assertThrows ('test_village_parse_10', 
+      () => parse_names_from_village_text(""), 
+    );
+    test_village_parse_10();
 }
 ////////////////////////////////////////////////////
 

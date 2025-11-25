@@ -17,12 +17,11 @@ async function get_ids_from_text(text, client) {
     client: process.env.VALIDATION_TYPE_DB_CLIENT,
   }, arguments);
 
-
   ////////
   //Logic
   const values = parse_names_from_village_text(text);
-  if(!values) return null;
-  
+  // if(!values) throw new ;
+
   return await get_ids_from_queries(values.township, values.district, client);
 }
 
@@ -35,14 +34,13 @@ async function get_ids_from_queries(township_name, district_name, client) {
 
   ////
   //Logic
-  let ids = null;
-  
-  ids = {
-      district_id: await select_id_query_from_district(district_name, client),
+  let ids = {
+      disrict_id: await select_id_query_from_district(district_name, client),
       township_id: await select_id_query_from_township(township_name, client),
   };
-  if (ids.district_id == null || ids.district_id == null) {
-    return null;
+  
+  if (ids.disrict_id == null || ids.township_id == null) {
+    return new NotFoundError(`Couldn't get the district_id with district: ${district_name} or township_id from township ${township_name}`);
   }
 
   return ids;
@@ -58,20 +56,7 @@ async function get_village_values(file_row, client) {
   /////
   //Logic
   const ids = await get_ids_from_text(file_row.area1, client);
-
-  if (!ids || !ids.district_id || !ids.township_id) return null;
-//   if (ids.length < 2 || ids[0].length == 0 || ids[1].length == 0) {
-//     console.log("Failed text:", row.area1);
-//   } else {
-//     // console.log("Succesful text:", file_json[i].area1, "with result", ids[0], ids[1]);
-//   }
-//   const values = {
-//     village_id: file_row.ekatte, 
-//     name: file_row.name, 
-//     name_en: file_row.name_en, 
-//     township_id: ids.township_id, 
-//     district_id: ids.district_id,
-//   };
+  if (!ids) return new NotFoundError(`Couldn't get ids from information ${JSON.stringify(file_row.area1)}`);
     
   return [file_row.ekatte, file_row.name, file_row.name_en, ids.township_id, ids.district_id];
 }

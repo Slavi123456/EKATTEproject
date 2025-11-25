@@ -3,12 +3,10 @@ import dotenv from 'dotenv';
 import {withErrorHandling } from "../utils/errorHandling.js";
 
 export { safe_insert_into_table};
-// export {insert_into_district, insert_into_township,
-//         insert_into_cityhalls, insert_into_villages}
 
 dotenv.config();
 
-const safe_insert_into_table = withErrorHandling(insert_into_table);
+const safe_insert_into_table = withErrorHandling(insert_into_table, {notRethrow: true});
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {
   /////////////////////////////////////////////////////
@@ -20,30 +18,6 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
     file_json: process.env.VALIDATION_TYPE_ARRAY,
     valueMapper: process.env.VALIDATION_TYPE_FUNCTION
   }, arguments);
-
-//   if (typeof insert_statement !== "string" || insert_statement.trim().length === 0) {
-//     throw new TypeError("insert_statement must be a non-empty string");
-//   }
-
-//   if (!db_client || typeof db_client.query !== "function") {
-//     throw new TypeError("db_client must be a PostgreSQL client with a .query() method");
-//   }
-
-//   if (typeof table_name !== "string" || table_name.trim().length === 0) {
-//     throw new TypeError("table_name must be a non-empty string");
-//   }
-
-//   if (!Array.isArray(file_json)) {
-//     throw new TypeError("file_json must be an array");
-//   }
-
-//   if (file_json.length === 0) {
-//     throw new Error("file_json is empty — nothing to insert");
-//   }
-//   //maybe i should also check the return parameters of this
-//   if (typeof valueMapper !== "function") {
-//     throw new TypeError("valueMapper must be a function");
-//   }  
 
   /////////////////////////////////////////////////////
   //Actual logic
@@ -64,6 +38,7 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
   );
 }
 
+//////////////////////////////////////
 // async function insert_into_district(insert_statement, client, table_name, file_json) {
 //     console.log("Inserting into table " + table_name);
 //     let succesful_isertions = 0;

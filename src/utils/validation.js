@@ -46,11 +46,7 @@ function validate(name, value, type) {
 }
 
 function validateMany(schema, args) {
-  // console.log(schema);
-  // console.log(args);
-
   const keys = Object.keys(schema);
-  // console.log(keys);
 
   keys.forEach((paramName, index) => {
     const type = schema[paramName];

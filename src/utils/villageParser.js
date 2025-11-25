@@ -5,7 +5,6 @@ export {parse_names_from_village_text};
 dotenv.config();
 
 function parse_names_from_village_text(text_to_parse) {
-  // console.log(process.env.VALIDATION_TYPE_NONEMPTY_STRING);
   validateMany ( {
     text_to_parse: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
   }, arguments);
@@ -16,14 +15,19 @@ function parse_names_from_village_text(text_to_parse) {
     /^\(([A-Za-z0-9]{5})\)\s*(?:(?:с\.|гр\.)?\s*([^,]+),\s*)?общ\.?\s*([^,]+),\s*обл\.?\s*(.+)$/;
   const match = text_to_parse.match(village_area_regex);
 
-  if (!match) return null;
-  //   console.log(match);
+  if (!match) throw new SyntaxError(`Invalid village format for ${text_to_parse}`);
   const [, code, settlement, township, district] = match;
   
-  return {
+  const result = {
     code: code.trim(),
     settlement: settlement == null ? "null" : settlement.trim(),
     township: township.trim(),
     district: district.trim(),
   };
+
+  if(result.township == "" || result.district == "") {
+    throw new SyntaxError(`Invalid village format for ${text_to_parse}`);
+  }
+
+  return result;
 }
