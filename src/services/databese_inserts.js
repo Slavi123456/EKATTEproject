@@ -24,7 +24,7 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
   //Actual logic
   console.log("Inserting into table " + table_name);
   // console.log(file_json.length - 1);
-  // let succesful_isertions = 0;
+  let succesful_isertions = 0;
 
   let data_count = file_json.length - process.env.EKATTE_TABLES_EXTRA_LINES;
   for (let i = 0; i < data_count; i++) {
@@ -32,12 +32,12 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
     // console.log(values);
     
     const res = await db_client.query(insert_statement, values);
-    // succesful_isertions++;
+    if (res.rows[0] != null) succesful_isertions++;
   }
   
-  // console.log(
-  //   `Successfuly inserted into table ${table_name} this many rows ${succesful_isertions}`
-  // );
+  console.log(
+    `Successfuly inserted into table ${table_name} this many rows ${succesful_isertions}`
+  );
 }
 
 //////////////////////////////////////
