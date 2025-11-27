@@ -1,13 +1,37 @@
-import { validateMany } from "../utils/validation.js";
-import dotenv from 'dotenv';
-import {withErrorHandling } from "../utils/errorHandling.js";
+import district__json_file from '../data/ek_obl.json' with {type: 'json'};
+import township__json_file from '../data/ek_obst.json' with {type: 'json'};
+import cityhalls__json_file from '../data/ek_kmet.json' with {type: 'json'};
+import villages__json_file from '../data/ek_sobr.json' with {type: 'json'};
 
-export { safe_insert_into_table};
+import dotenv from 'dotenv';
+import { validateMany } from "../utils/validation.js";
+import {withErrorHandling } from "../utils/errorHandling.js";
+import { safe_get_village_values } from '../services/village.js';
+
+export { bulk_inserts_from_json};
 
 dotenv.config();
 
 // const safe_insert_into_table = withErrorHandling(insert_into_table, {notRethrow: true});
 const safe_insert_into_table = withErrorHandling(insert_into_table);
+
+async function bulk_inserts_from_json(client) {
+  validateMany ( {
+    client: process.env.VALIDATION_TYPE_DB_CLIENT,
+  }, arguments);
+
+  const district_insert = 'INSERT INTO district(id, name, name_en, center_id) VALUES($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING *';
+  await safe_insert_into_table(district_insert, client, 'District', district__json_file, row => [row.oblast, row.name, row.name_en, row.ekatte]);
+  
+  const township_insert = ' INSERT INTO township(id, name, name_en, district_id, center_id) VALUES($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING RETURNING *;';
+  await safe_insert_into_table(township_insert, client, 'Township', township__json_file, row => [row.obshtina, row.name, row.name_en, row.obshtina.substring(0,3), row.ekatte]);
+  
+  const cityhalls_insert = ' INSERT INTO cityhall(id, name, name_en, township_id) VALUES($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING *;';
+  await safe_insert_into_table(cityhalls_insert, client, 'Cityhalls', cityhalls__json_file, row => [row.kmetstvo, row.name, row.name_en, row.kmetstvo.substring(0,5)]);
+  
+  const villages_insert = ' INSERT INTO villages(id, name, name_en, township_id, district_id) VALUES($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING RETURNING *;';
+  await safe_insert_into_table(villages_insert, client, 'Villages', villages__json_file, safe_get_village_values);
+}
 
 async function insert_into_table(insert_statement, db_client, table_name, file_json, valueMapper) {
   /////////////////////////////////////////////////////
