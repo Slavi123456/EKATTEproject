@@ -1,6 +1,6 @@
 import { validateMany } from "../utils/validation.js";
 
-export {select_id_query_from_district};
+export {select_id_query_from_district,get_district_rows_count};
 
 async function select_id_query_from_district(district_name, client) {
   validateMany ( {
@@ -16,4 +16,15 @@ async function select_id_query_from_district(district_name, client) {
   );
   // console.log("District id ", district_id_res.rows[0]?.id, "for ", district_name );
   return district_id_res.rows[0]?.id;
+}
+
+
+async function get_district_rows_count(client) {
+  ////
+  //Logic
+  const res = await client.query("SELECT COUNT(*) FROM district;");
+  // console.log(villages_count.rows);
+  // console.log(villages_count.rows[0]?.count);
+
+  return res.rows[0]?.count;
 }

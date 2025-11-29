@@ -6,7 +6,7 @@ import villages__json_file from '../data/ek_sobr.json' with {type: 'json'};
 import dotenv from 'dotenv';
 import { validateMany } from "../utils/validation.js";
 import {withErrorHandling } from "../utils/errorHandling.js";
-import { safe_get_village_values } from '../services/village.js';
+import { safe_get_village_values } from '../model/village.js';
 
 export { bulk_inserts_from_json};
 
