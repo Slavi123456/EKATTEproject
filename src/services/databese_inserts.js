@@ -46,7 +46,7 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
 
   /////////////////////////////////////////////////////
   //Actual logic
-  console.log("Inserting into table " + table_name);
+  console.log("->> Inserting into table " + table_name);
   // console.log(file_json.length - 1);
   let succesful_isertions = 0;
 
@@ -60,7 +60,7 @@ async function insert_into_table(insert_statement, db_client, table_name, file_j
   }
   
   console.log(
-    `Successfuly inserted into table ${table_name} this many rows ${succesful_isertions}`
+    `->> Successfuly inserted into table {${table_name}} this many rows {${succesful_isertions}}`
   );
 }
 

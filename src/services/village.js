@@ -1,6 +1,6 @@
 import { parse_names_from_village_text } from "../utils/villageParser.js";
-import { select_id_query_from_district } from "../db/district.js";
-import { select_id_query_from_township } from "../db/township.js";
+import { select_id_query_from_district } from "../model/district.js";
+import { select_id_query_from_township } from "../model/township.js";
 import { validateMany } from "../utils/validation.js";
 import { withErrorHandling } from "../utils/errorHandling.js";
 import dotenv from 'dotenv';

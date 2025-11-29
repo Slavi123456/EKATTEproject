@@ -2,7 +2,7 @@ import { parse_names_from_village_text } from '../src/utils/villageParser.js';
 import { assertThrows, assertWithMessage } from './test_utils.js';
 
 
-test_parsing_village_test();
+export {test_parsing_village_test}
 
 function test_parsing_village_test() {
   
