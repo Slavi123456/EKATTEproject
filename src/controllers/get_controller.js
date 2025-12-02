@@ -1,23 +1,33 @@
-import { serveStaticFile } from "./main_page.js";
+import { serve_static_files, data_load, fill_tables, village_query_handler} from "./main_page.js";
 
 export { get_controller };
 
 async function get_controller(req, res) {
-  console.log("->> GET_controller with request url", req.url);
-  switch (req.url) {
+  switch (req.pathname) {
     case "/": {
-      await serveStaticFile(req, res, "public/main.html");
+      await serve_static_files(req, res, "public/main.html");
       break;
     }
     case "/main.css": {
-      await serveStaticFile(req, res, "public");
+      await serve_static_files(req, res, "public");
       break;
     }
-    case "/init": {
-      // await data_load();
+    case "/main.js": {
+      await serve_static_files(req, res, "public");
+      break;
+    }
+    case "/api/init": {
+      await fill_tables();
+      await data_load(req,res);
+      break;
+    }
+    case "/villages": {
+      await village_query_handler(req,res);
+      break;
     }
     default: {
-      await serveStaticFile(req, res, "public");
+      await serve_static_files(req, res, "public");
     }
   }
 }
+

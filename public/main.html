@@ -3,19 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <title>Responsive Grid</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="main.css" />
   </head>
 
   <body>
     <div class="grid">
-      <div class="item">1</div>
-      <div class="item">2</div>
-      <div class="item">3</div>
-      <div class="item">4</div>
+      <div class="item">
+        <p>Districts count:</p>
+        <p id="district_info"></p>
+      </div>
+      <div class="item">
+        <p>Township count:</p>
+        <p id="township_info"></p>
+      </div>
+      <div class="item">
+        <p>Cityhalls count:</p>
+        <p id="cityhall_info"></p>
+      </div>
+      <div class="item">
+        <p>Village count:</p>
+        <p id="village_info"></p>
+      </div>
 
-      <div class="item query">Query</div>
+      <div class="item query">
+        <form id="villageForm">
+          <label for="fname">Име на селище:</label>
+          <input type="text" id="bg-name" />
 
-      <div class="item table">Table</div>
+          <label for="lname">Име на английски:</label>
+          <input type="text" id="en-name" />
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <div class="item table">
+        <table id="villagesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name (BG)</th>
+              <th>Name (EN)</th>
+              <th>District</th>
+              <th>Township</th>
+              <th>Cityhall</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
+
+    <script src="main.js"></script>
   </body>
 </html>

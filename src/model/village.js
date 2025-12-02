@@ -5,7 +5,7 @@ import { validateMany } from "../utils/validation.js";
 import { withErrorHandling } from "../utils/errorHandling.js";
 import dotenv from "dotenv";
 
-export { safe_get_village_values, get_village_rows_count };
+export { safe_get_village_values, get_village_rows_count, get_villages_info};
 
 dotenv.config();
 
@@ -95,4 +95,35 @@ async function get_village_rows_count(client) {
   // console.log(villages_count.rows[0]?.count);
 
   return villages_count.rows[0]?.count;
+}
+
+async function get_villages_info({ bgName, enName }, client) {
+  // let sql = `SELECT * FROM villages WHERE 1=1`;
+  let sql = `
+    SELECT 
+        V.id,
+        V.name,
+        V.name_en,
+        D.name AS DistrictName,
+        T.name AS TownshipName,
+        (SELECT name FROM cityhall C WHERE C.township_id = T.id LIMIT 1) AS CityhallName
+    FROM villages V
+    JOIN district D ON V.district_id = D.id
+    JOIN township T ON V.township_id = T.id
+    WHERE 1 = 1`;
+  const params = [];
+  let count = 1;
+  if (bgName !== undefined) {
+    sql += ` AND V.name = $${count}`;
+    count++;
+    params.push(bgName);
+  }
+
+  if (enName !== undefined) {
+    sql += ` AND V.name_en = $${count}`;
+    count++;
+    params.push(enName);
+  }
+  // console.log(sql, params);
+  return await client.query(sql, params);
 }

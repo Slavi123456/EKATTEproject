@@ -4,11 +4,58 @@ import { getStatistics } from "../services/statistics.js";
 import path from "path";
 import fs from "fs/promises";
 import { __projectdir } from "../paths.js";
+import { get_villages_info } from "../model/village.js";
 
-export { serveStaticFile };
+export { serve_static_files, data_load, fill_tables, village_query_handler };
 // export { main_page_handler, data_load, main_page_css};
 
 ("use-strict");
+
+async function fill_tables() {
+  await bulk_inserts_from_json(client);
+}
+
+async function data_load(req, res) {
+  const tableStats = await getStatistics();
+
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(tableStats));
+}
+
+const mimeTypes = {
+  ".html": "text/html",
+  ".css": "text/css",
+  ".js": "application/javascript",
+  ".json": "application/json",
+};
+
+async function serve_static_files(req, res, folder) {
+  try {
+    const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
+    const filePath = path.join(__projectdir, folder, urlPath);
+
+    const ext = path.extname(filePath);
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+
+    // console.log(urlPath, "\n", filePath, "\n", ext, "\n", contentType);
+    const data = await fs.readFile(filePath);
+    res.writeHead(200, { "Content-Type": contentType });
+    res.end(data);
+  } catch (err) {
+    res.writeHead(404);
+    res.end(`${req.url} not found`);
+  }
+}
+
+async function village_query_handler(req, res) {
+  const query = req.query;
+  // console.log(query);
+  const query_res = await get_villages_info(query, client);
+  console.log(query_res.rows);
+
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(query_res));
+}
 
 // async function main_page_handler(req, res) {
 //   console.log("->> Main_page handler");
@@ -42,33 +89,3 @@ export { serveStaticFile };
 
 //   return file;
 // }
-
-// async function data_load() {
-//   await bulk_inserts_from_json(client);
-//   const tableStats = await getStatistics();
-// }
-
-const mimeTypes = {
-  ".html": "text/html",
-  ".css": "text/css",
-  ".js": "application/javascript",
-  ".json": "application/json",
-};
-
-async function serveStaticFile(req, res, folder) {
-  try {
-    const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
-    const filePath = path.join(__projectdir, folder, urlPath);
-
-    const ext = path.extname(filePath);
-    const contentType = mimeTypes[ext] || "application/octet-stream";
-
-    // console.log(urlPath, "\n", filePath, "\n", ext, "\n", contentType);
-    const data = await fs.readFile(filePath);
-    res.writeHead(200, { "Content-Type": contentType });
-    res.end(data);
-  } catch (err) {
-    res.writeHead(404);
-    res.end(`${req.url} not found`);
-  }
-}

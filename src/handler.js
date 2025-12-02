@@ -1,10 +1,12 @@
 import { get_controller } from "./controllers/get_controller.js";
+import { fix_request } from "./middlewares/fix_request.js";
 import { loggerMiddleware } from "./middlewares/logger.js";
 
 export { handler };
 
 const middlewares = [];
 
+middlewares.push(fix_request);
 middlewares.push(loggerMiddleware);
 
 function handler(req, res) {
