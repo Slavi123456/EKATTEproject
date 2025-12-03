@@ -24,7 +24,9 @@ let n = 10;
 let c = 1;
 
 function pravi() {
-  if(ger < 0 || geor < 0 || n < 0 || c < 0) { throw new Error("Illegal arguments");}
+  if (ger < 0 || geor < 0 || n < 0 || c < 0) {
+    throw new Error("Illegal arguments");
+  }
   let begGer = n % ger;
   let begGeor = 0;
 
@@ -40,15 +42,16 @@ function pravi() {
   let georInd = 0;
 
   let sumLen = 0;
-
+  let lines = [];
   while (gerInd < gerArr.length && georInd < georArr.length) {
     console.log(gerArr[gerInd], " ", georArr[georInd]);
     if (Math.abs(gerArr[gerInd] - georArr[georInd]) == c) {
       sumLen += c;
+      lines.push([gerArr[gerInd],georArr[georInd]]);
     }
     if (gerArr[gerInd] == georArr[georInd]) {
       gerInd++;
-    //   georInd++;
+      //   georInd++;
     } else if (gerArr[gerInd] < georArr[georInd]) {
       gerInd++;
     } else {
@@ -57,6 +60,7 @@ function pravi() {
   }
 
   console.log(n - sumLen);
+  console.log(lines);
 }
 
 pravi();

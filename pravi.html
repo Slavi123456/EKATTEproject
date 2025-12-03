@@ -1,39 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Pravi</title>
-  <style>
-    .dot {
-      width: 1cm;
-      height: 1cm;
-      border-radius: 50%;
-      background: rgb(240, 190, 190);
-      display: inline-block;
-    }
-  </style>
-</head>
-<body>
-
-
-  <div id="dots-container"></div>
-
-  <script>
-    function drawDots(count, gapCm = 3) {
-      const container = document.getElementById("dots-container");
-      container.innerHTML = "";
-
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement("div");
-        dot.classList.add("dot");
-        dot.style.marginRight = gapCm + "cm";
-
-        container.appendChild(dot);
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pravi</title>
+    <style>
+      .dot {
+        width: 0.3cm;
+        height: 0.3cm;
+        border-radius: 50%;
+        background: rgb(0, 0, 0);
+        display: inline-block;
       }
-    }
+     #wrapper {
+        position: relative;
+      }
 
-    drawDots(10);
-  </script>
+      #canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+      }
 
-</body>
+      #dots-container {
+        position: relative;
+        z-index: 2;
+      } 
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <canvas id="canvas"></canvas>
+      <div id="dots-container"></div>
+    </div>
+
+    <script>
+      let ger = 3;
+      let geor = 2;
+      let n = 10;
+      let c = 1;
+
+      function pravi() {
+        if (ger < 0 || geor < 0 || n < 0 || c < 0) {
+          throw new Error("Illegal arguments");
+        }
+        let begGer = n % ger;
+        let begGeor = 0;
+
+        const gerArr = [];
+        for (let i = begGer; i <= n; i += ger) gerArr.push(i);
+        console.log(gerArr);
+
+        const georArr = [];
+        for (let i = begGeor; i <= n; i += geor) georArr.push(i);
+        console.log(georArr);
+
+        let gerInd = 0;
+        let georInd = 0;
+
+        let sumLen = 0;
+        let lines = [];
+        while (gerInd < gerArr.length && georInd < georArr.length) {
+          console.log(gerArr[gerInd], " ", georArr[georInd]);
+          if (Math.abs(gerArr[gerInd] - georArr[georInd]) == c) {
+            sumLen += c;
+            lines.push([gerArr[gerInd], georArr[georInd]]);
+          }
+          if (gerArr[gerInd] == georArr[georInd]) {
+            gerInd++;
+            //   georInd++;
+          } else if (gerArr[gerInd] < georArr[georInd]) {
+            gerInd++;
+          } else {
+            georInd++;
+          }
+        }
+
+        console.log(n - sumLen);
+        console.log(lines);
+        return lines;
+      }
+
+      const canvas = document.getElementById("canvas");
+      const wrapper = document.getElementById("wrapper");
+      const ctx = canvas.getContext("2d");
+
+      function drawDots() {
+        const container = document.getElementById("dots-container");
+        container.innerHTML = "";
+
+        for (let i = 0; i < n; i++) {
+          const dot = document.createElement("div");
+          dot.classList.add("dot");
+          dot.style.marginRight = "0.3cm";
+          dot.id = i;
+          container.appendChild(dot);
+        }
+
+        canvas.width = wrapper.offsetWidth;
+        canvas.height = wrapper.offsetHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let lines = pravi();
+        console.log(lines);
+        lines.forEach((pair) => drawLine(pair));
+      }
+
+      function drawLine(pair) {
+        const dotA = document.getElementById(`${pair[0]}`);
+        const dotB = document.getElementById(`${pair[1]}`);
+
+        if (!dotA || !dotB) return;
+
+        const r1 = dotA.getBoundingClientRect();
+        const r2 = dotB.getBoundingClientRect();
+        const wRect = wrapper.getBoundingClientRect();
+
+        const x1 = r1.left + r1.width / 2 - wRect.left;
+        const y1 = r1.top + r1.height / 2 - wRect.top;
+        const x2 = r2.left + r2.width / 2 - wRect.left;
+        const y2 = r2.top + r2.height / 2 - wRect.top;
+
+        console.log(x1, y1);
+        console.log(x2, y2);
+
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+      drawDots();
+    </script>
+  </body>
 </html>
