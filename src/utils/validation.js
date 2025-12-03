@@ -1,8 +1,19 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
-export {validate, validateMany}
+export { validate, validateMany };
+
+///Еxample
+//function fun(arg1, agr2, ...) {
+// validateMany(
+//   {
+//     arg1: process.env.VALIDATION_TYPE_OBJECT,
+//     arg2: process.env.VALIDATION_TYPE_DB_CLIENT,
+//      ...
+//   },
+//   arguments
+// );
 
 function validate(name, value, type) {
   switch (type) {
@@ -13,7 +24,10 @@ function validate(name, value, type) {
       return;
 
     case process.env.VALIDATION_TYPE_NONEMPTY_STRING:
-      if (typeof value !== process.env.VALIDATION_TYPE_STRING || value.trim() === "") {
+      if (
+        typeof value !== process.env.VALIDATION_TYPE_STRING ||
+        value.trim() === ""
+      ) {
         throw new TypeError(`${name} must be a non-empty string`);
       }
       return;
@@ -31,14 +45,19 @@ function validate(name, value, type) {
       return;
 
     case process.env.VALIDATION_TYPE_DB_CLIENT:
-      if (!value || typeof value.query !== process.env.VALIDATION_TYPE_FUNCTION) {
-        throw new TypeError(`${name} must be a database client with a .query() method`);
+      if (
+        !value ||
+        typeof value.query !== process.env.VALIDATION_TYPE_FUNCTION
+      ) {
+        throw new TypeError(
+          `${name} must be a database client with a .query() method`
+        );
       }
       return;
     case process.env.VALIDATION_TYPE_OBJECT:
       if (!value || typeof value !== process.env.VALIDATION_TYPE_OBJECT) {
         throw new TypeError(`${name} must be an object`);
-      }  
+      }
       return;
     default:
       throw new Error(`Unknown validation type "${type}"`);

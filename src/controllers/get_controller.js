@@ -1,4 +1,5 @@
-import { serve_static_files, data_load, fill_tables, village_query_handler} from "./main_page.js";
+import { data_load, fill_tables, village_query_handler} from "./queries.js";
+import { serve_static_files } from "./static_files.js";
 
 export { get_controller };
 
