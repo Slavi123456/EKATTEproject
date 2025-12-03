@@ -40,7 +40,7 @@ function pravi() {
 
   let sumLen = 0;
 
-  while (gerInd <= gerArr.length && georInd <= georArr.length) {
+  while (gerInd < gerArr.length && georInd < georArr.length) {
     console.log(gerArr[gerInd], " ", georArr[georInd]);
     if (Math.abs(gerArr[gerInd] - georArr[georInd]) == c) {
       sumLen += c;
