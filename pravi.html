@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pravi</title>
+  <style>
+    .dot {
+      width: 1cm;
+      height: 1cm;
+      border-radius: 50%;
+      background: rgb(240, 190, 190);
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div id="dots-container"></div>
+
+  <script>
+    function drawDots(count, gapCm = 3) {
+      const container = document.getElementById("dots-container");
+      container.innerHTML = "";
+
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        dot.style.marginRight = gapCm + "cm";
+
+        container.appendChild(dot);
+      }
+    }
+
+    drawDots(10);
+  </script>
+
+</body>
+</html>
