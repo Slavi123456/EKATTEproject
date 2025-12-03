@@ -11,7 +11,7 @@
         background: rgb(0, 0, 0);
         display: inline-block;
       }
-     #wrapper {
+      #wrapper {
         position: relative;
       }
 
@@ -25,10 +25,26 @@
       #dots-container {
         position: relative;
         z-index: 2;
-      } 
+      }
     </style>
   </head>
   <body>
+    <form id="praviForm">
+      <label>Големина AY</label>
+      <input type="text" id="len" />
+
+      <label>а</label>
+      <input type="text" id="ger" />
+
+      <label>b</label>
+      <input type="text" id="geor" />
+
+      <label>c</label>
+      <input type="text" id="c" />
+
+      <button type="submit">Submit</button>
+    </form>
+
     <div id="wrapper">
       <canvas id="canvas"></canvas>
       <div id="dots-container"></div>
@@ -39,6 +55,20 @@
       let geor = 2;
       let n = 10;
       let c = 1;
+
+      document
+        .getElementById("praviForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          n = parseInt(document.getElementById("len").value);
+          ger = parseInt(document.getElementById("ger").value);
+          geor = parseInt(document.getElementById("geor").value);
+          c = parseInt(document.getElementById("c").value);
+        
+          
+          drawDots();
+        });
 
       function pravi() {
         if (ger < 0 || geor < 0 || n < 0 || c < 0) {
@@ -131,7 +161,6 @@
         ctx.lineTo(x2, y2);
         ctx.stroke();
       }
-      drawDots();
     </script>
   </body>
 </html>
