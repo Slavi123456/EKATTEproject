@@ -24,6 +24,7 @@ let n = 10;
 let c = 1;
 
 function pravi() {
+  if(ger < 0 || geor < 0 || n < 0 || c < 0) { throw new Error("Illegal arguments");}
   let begGer = n % ger;
   let begGeor = 0;
 
@@ -47,7 +48,7 @@ function pravi() {
     }
     if (gerArr[gerInd] == georArr[georInd]) {
       gerInd++;
-      georInd++;
+    //   georInd++;
     } else if (gerArr[gerInd] < georArr[georInd]) {
       gerInd++;
     } else {
