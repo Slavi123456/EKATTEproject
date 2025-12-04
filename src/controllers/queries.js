@@ -1,4 +1,3 @@
-import client from "../config/db.js";
 import { bulk_inserts_from_json } from "../services/databese_inserts.js";
 import { getStatistics } from "../services/statistics.js";
 import { get_villages_info } from "../model/village.js";
@@ -9,7 +8,7 @@ export {data_load, fill_tables, village_query_handler };
 ("use-strict");
 
 async function fill_tables() {
-  await bulk_inserts_from_json(client);
+  await bulk_inserts_from_json();
 }
 
 async function data_load(req, res) {
@@ -22,7 +21,7 @@ async function data_load(req, res) {
 async function village_query_handler(req, res) {
   const query = req.query;
   // console.log(query);
-  const query_res = await get_villages_info(query, client);
+  const query_res = await get_villages_info(query);
   console.log(query_res.rows);
 
   res.writeHead(200, { "Content-Type": "application/json" });

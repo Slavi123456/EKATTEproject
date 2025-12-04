@@ -1,4 +1,4 @@
-import { test_parsing_village_test } from "./pasing_test.js";
+// import { test_parsing_village_test } from "./pasing_test.js";
 
 // tests();
 

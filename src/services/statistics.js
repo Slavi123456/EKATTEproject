@@ -1,5 +1,4 @@
 import { get_village_rows_count } from "../model/village.js";
-import client from "../config/db.js";
 import { NotFoundError } from "../errors/custom_error.js";
 import { get_district_rows_count } from "../model/district.js";
 import { get_township_rows_count } from "../model/township.js";
@@ -9,10 +8,10 @@ export { getStatistics };
 
 async function getStatistics() {
   const tableStatistics = {
-    village_count: await get_village_rows_count(client),
-    district_count: await get_district_rows_count(client),
-    township_count: await get_township_rows_count(client),
-    cityhalls_count: await get_cityhall_rows_count(client),
+    village_count: await get_village_rows_count(),
+    district_count: await get_district_rows_count(),
+    township_count: await get_township_rows_count(),
+    cityhalls_count: await get_cityhall_rows_count(),
   };
   console.log(tableStatistics);
   if (

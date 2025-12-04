@@ -4,18 +4,22 @@ import { select_id_query_from_township } from "./township.js";
 import { validateMany } from "../utils/validation.js";
 import { withErrorHandling } from "../utils/errorHandling.js";
 import dotenv from "dotenv";
+import client from "../config/db.js"
 
 export { safe_get_village_values, get_village_rows_count, get_villages_info};
+
+//Somehow to be exported only on test environment
+export { get_ids_from_queries }
 
 dotenv.config();
 
 const safe_get_village_values = withErrorHandling(get_village_values);
 
-async function get_ids_from_text(text, client) {
+async function get_ids_from_text(text) {
   validateMany(
     {
       text: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
-      client: process.env.VALIDATION_TYPE_DB_CLIENT,
+      // client: process.env.VALIDATION_TYPE_DB_CLIENT,
     },
     arguments
   );
@@ -29,18 +33,17 @@ async function get_ids_from_text(text, client) {
   const ids = await get_ids_from_queries(
     values.township,
     values.district,
-    client
   );
   // console.log(ids);
   return ids;
 }
 
-async function get_ids_from_queries(township_name, district_name, client) {
+async function get_ids_from_queries(township_name, district_name) {
   validateMany(
     {
       township_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
       district_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
-      client: process.env.VALIDATION_TYPE_DB_CLIENT,
+      // client: process.env.VALIDATION_TYPE_DB_CLIENT,
     },
     arguments
   );
@@ -48,8 +51,8 @@ async function get_ids_from_queries(township_name, district_name, client) {
   ////
   //Logic
   let ids = {
-    district_id: await select_id_query_from_district(district_name, client),
-    township_id: await select_id_query_from_township(township_name, client),
+    district_id: await select_id_query_from_district(district_name),
+    township_id: await select_id_query_from_township(township_name),
   };
 
   if (ids.district_id == null || ids.township_id == null) {
@@ -61,18 +64,18 @@ async function get_ids_from_queries(township_name, district_name, client) {
   return ids;
 }
 
-async function get_village_values(file_row, client) {
+async function get_village_values(file_row) {
   validateMany(
     {
       file_row: process.env.VALIDATION_TYPE_OBJECT,
-      client: process.env.VALIDATION_TYPE_DB_CLIENT,
+      // client: process.env.VALIDATION_TYPE_DB_CLIENT,
     },
     arguments
   );
 
   /////
   //Logic
-  const ids = await get_ids_from_text(file_row.area1, client);
+  const ids = await get_ids_from_text(file_row.area1);
   if (!ids)
     return new NotFoundError(
       `Couldn't get ids from information ${JSON.stringify(file_row.area1)}`
@@ -87,7 +90,7 @@ async function get_village_values(file_row, client) {
   ];
 }
 
-async function get_village_rows_count(client) {
+async function get_village_rows_count() {
   ////
   //Logic
   const villages_count = await client.query("SELECT COUNT(*) FROM villages;");
@@ -97,7 +100,7 @@ async function get_village_rows_count(client) {
   return villages_count.rows[0]?.count;
 }
 
-async function get_villages_info({ bgName, enName }, client) {
+async function get_villages_info({ bgName, enName }) {
   // let sql = `SELECT * FROM villages WHERE 1=1`;
   let sql = `
     SELECT 

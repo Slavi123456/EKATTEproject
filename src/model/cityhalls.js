@@ -1,6 +1,8 @@
+import client from "../config/db.js"
+
 export {get_cityhall_rows_count};
 
-async function get_cityhall_rows_count(client) {
+async function get_cityhall_rows_count() {
   ////
   //Logic
   const res = await client.query("SELECT COUNT(*) FROM cityhall;");

@@ -1,11 +1,12 @@
 import { validateMany } from "../utils/validation.js";
+import client from "../config/db.js"
 
-export {select_id_query_from_district,get_district_rows_count};
+export {select_id_query_from_district, get_district_rows_count};
 
-async function select_id_query_from_district(district_name, client) {
+async function select_id_query_from_district(district_name) {
   validateMany ( {
     district_name: process.env.VALIDATION_TYPE_NONEMPTY_STRING,
-    client: process.env.VALIDATION_TYPE_DB_CLIENT,
+    // client: process.env.VALIDATION_TYPE_DB_CLIENT,
   }, arguments);
   
   ////
@@ -19,7 +20,7 @@ async function select_id_query_from_district(district_name, client) {
 }
 
 
-async function get_district_rows_count(client) {
+async function get_district_rows_count() {
   ////
   //Logic
   const res = await client.query("SELECT COUNT(*) FROM district;");

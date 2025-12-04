@@ -44,16 +44,16 @@ function validate(name, value, type) {
       }
       return;
 
-    case process.env.VALIDATION_TYPE_DB_CLIENT:
-      if (
-        !value ||
-        typeof value.query !== process.env.VALIDATION_TYPE_FUNCTION
-      ) {
-        throw new TypeError(
-          `${name} must be a database client with a .query() method`
-        );
-      }
-      return;
+    // case process.env.VALIDATION_TYPE_DB_CLIENT:
+    //   if (
+    //     !value ||
+    //     typeof value.query !== process.env.VALIDATION_TYPE_FUNCTION
+    //   ) {
+    //     throw new TypeError(
+    //       `${name} must be a database client with a .query() method`
+    //     );
+    //   }
+    //   return;
     case process.env.VALIDATION_TYPE_OBJECT:
       if (!value || typeof value !== process.env.VALIDATION_TYPE_OBJECT) {
         throw new TypeError(`${name} must be an object`);
